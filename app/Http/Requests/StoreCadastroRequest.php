@@ -43,7 +43,7 @@ class StoreCadastroRequest extends FormRequest
             'cep' => ['required', 'regex:/^\d{8}$/'],
             'logradouro' => ['required', 'string', 'max:255'],
             'numero' => ['required', 'string', 'max:20'],
-            'complemento' => ['required', 'string', 'max:255'],
+            'complemento' => ['nullable', 'string', 'max:255'],
             'celular' => ['required', 'regex:/^(?:55)?[1-9]{2}9\d{8}$/'],
             'email' => ['nullable', 'email', 'max:255'],
             'lideranca' => ['nullable', 'string', 'max:255'],

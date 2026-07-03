@@ -324,8 +324,8 @@
             </div>
 
             <div class="col-12">
-                <label for="complemento" class="form-label">Complemento *</label>
-                <input type="text" class="form-control @error('complemento') is-invalid @enderror" id="complemento" name="complemento" value="{{ old('complemento', data_get($cadastro ?? null, 'complemento')) }}" placeholder="Apartamento, bloco, referência..." required>
+                <label for="complemento" class="form-label">Complemento</label>
+                <input type="text" class="form-control @error('complemento') is-invalid @enderror" id="complemento" name="complemento" value="{{ old('complemento', data_get($cadastro ?? null, 'complemento')) }}" placeholder="Apartamento, bloco, referência...">
                 @error('complemento') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
         </div>
