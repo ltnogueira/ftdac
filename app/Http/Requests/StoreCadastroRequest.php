@@ -45,8 +45,8 @@ class StoreCadastroRequest extends FormRequest
             'numero' => ['required', 'string', 'max:20'],
             'complemento' => ['required', 'string', 'max:255'],
             'celular' => ['required', 'regex:/^(?:55)?[1-9]{2}9\d{8}$/'],
-            'email' => ['required', 'email', 'max:255'],
-            'lideranca' => ['required', 'string', 'max:255'],
+            'email' => ['nullable', 'email', 'max:255'],
+            'lideranca' => ['nullable', 'string', 'max:255'],
             'atualizado_por' => ['required', 'string', 'max:255'],
             'tipo_contato' => ['required', Rule::in(array_keys(Cadastro::tiposContato()))],
         ];
@@ -80,21 +80,25 @@ class StoreCadastroRequest extends FormRequest
         ];
     }
 
-    protected function normalizeText(mixed $value): string
+    protected function normalizeText(mixed $value): ?string
     {
-        return Str::of((string) $value)
+        $normalized = Str::of((string) $value)
             ->trim()
             ->ascii()
             ->upper()
             ->toString();
+
+        return $normalized === '' ? null : $normalized;
     }
 
-    protected function normalizeEmail(mixed $value): string
+    protected function normalizeEmail(mixed $value): ?string
     {
-        return Str::of((string) $value)
+        $normalized = Str::of((string) $value)
             ->trim()
             ->ascii()
             ->lower()
             ->toString();
+
+        return $normalized === '' ? null : $normalized;
     }
 }

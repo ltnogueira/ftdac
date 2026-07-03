@@ -47,24 +47,35 @@ class CadastroFlowTest extends TestCase
         ]);
     }
 
-    public function test_todos_os_campos_do_cadastro_sao_obrigatorios(): void
+    public function test_email_e_lideranca_sao_opcionais_no_cadastro(): void
     {
-        $response = $this->post(route('cadastros.store'), []);
+        $response = $this->post(route('cadastros.store'), [
+            'codigo' => 'cod002',
+            'nome' => 'Joao Silva',
+            'apelido' => 'Joao',
+            'ra' => 'Gama',
+            'cep' => '02002-000',
+            'logradouro' => 'Rua B',
+            'numero' => '200',
+            'complemento' => 'Casa 2',
+            'celular' => '(11) 99888-7777',
+            'email' => '',
+            'lideranca' => '',
+            'atualizado_por' => 'Operador',
+            'tipo_contato' => Cadastro::TIPO_LIGACAO,
+        ]);
 
-        $response->assertSessionHasErrors([
-            'codigo',
-            'nome',
-            'apelido',
-            'ra',
-            'cep',
-            'logradouro',
-            'numero',
-            'complemento',
-            'celular',
+        $response->assertRedirect(route('cadastros.create'));
+        $response->assertSessionDoesntHaveErrors([
             'email',
             'lideranca',
-            'atualizado_por',
-            'tipo_contato',
+        ]);
+
+        $this->assertDatabaseHas('cadastros', [
+            'codigo' => 'COD002',
+            'email' => null,
+            'lideranca' => null,
+            'atualizado_por' => 'OPERADOR',
         ]);
     }
 

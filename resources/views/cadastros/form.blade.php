@@ -348,14 +348,14 @@
             </div>
 
             <div class="col-12 col-md-8">
-                <label for="email" class="form-label">E-mail *</label>
-                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email', data_get($cadastro ?? null, 'email')) }}" placeholder="nome@email.com" required>
+                <label for="email" class="form-label">E-mail</label>
+                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email', data_get($cadastro ?? null, 'email')) }}" placeholder="nome@email.com">
                 @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
 
             <div class="col-12 col-md-4">
-                <label for="lideranca" class="form-label">Liderança *</label>
-                <input type="text" class="form-control @error('lideranca') is-invalid @enderror" id="lideranca" name="lideranca" value="{{ old('lideranca', data_get($cadastro ?? null, 'lideranca')) }}" placeholder="Nome da liderança" required>
+                <label for="lideranca" class="form-label">Liderança</label>
+                <input type="text" class="form-control @error('lideranca') is-invalid @enderror" id="lideranca" name="lideranca" value="{{ old('lideranca', data_get($cadastro ?? null, 'lideranca')) }}" placeholder="Nome da liderança">
                 @error('lideranca') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
 
