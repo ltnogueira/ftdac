@@ -14,7 +14,7 @@ class UpdateCadastroRequest extends StoreCadastroRequest
         return [
             'codigo' => ['required', 'string', 'max:50', Rule::unique('cadastros', 'codigo')->ignore($cadastro)],
             'nome' => ['required', 'string', 'max:255'],
-            'apelido' => ['required', 'string', 'max:255'],
+            'apelido' => ['nullable', 'string', 'max:255'],
             'ra' => ['required', 'string', 'max:255'],
             'cep' => ['required', 'regex:/^\d{8}$/'],
             'logradouro' => ['required', 'string', 'max:255'],

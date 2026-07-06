@@ -47,12 +47,12 @@ class CadastroFlowTest extends TestCase
         ]);
     }
 
-    public function test_email_lideranca_e_complemento_sao_opcionais_no_cadastro(): void
+    public function test_apelido_email_lideranca_e_complemento_sao_opcionais_no_cadastro(): void
     {
         $response = $this->post(route('cadastros.store'), [
             'codigo' => 'cod002',
             'nome' => 'Joao Silva',
-            'apelido' => 'Joao',
+            'apelido' => '',
             'ra' => 'Gama',
             'cep' => '02002-000',
             'logradouro' => 'Rua B',
@@ -67,6 +67,7 @@ class CadastroFlowTest extends TestCase
 
         $response->assertRedirect(route('cadastros.create'));
         $response->assertSessionDoesntHaveErrors([
+            'apelido',
             'complemento',
             'email',
             'lideranca',
@@ -74,6 +75,7 @@ class CadastroFlowTest extends TestCase
 
         $this->assertDatabaseHas('cadastros', [
             'codigo' => 'COD002',
+            'apelido' => null,
             'complemento' => null,
             'email' => null,
             'lideranca' => null,

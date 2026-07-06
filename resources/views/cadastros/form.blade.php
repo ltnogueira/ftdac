@@ -282,8 +282,8 @@
             </div>
 
             <div class="col-12 col-md-6">
-                <label for="apelido" class="form-label">Apelido *</label>
-                <input type="text" class="form-control @error('apelido') is-invalid @enderror" id="apelido" name="apelido" value="{{ old('apelido', data_get($cadastro ?? null, 'apelido')) }}" placeholder="Como é conhecido(a)" required>
+                <label for="apelido" class="form-label">Apelido</label>
+                <input type="text" class="form-control @error('apelido') is-invalid @enderror" id="apelido" name="apelido" value="{{ old('apelido', data_get($cadastro ?? null, 'apelido')) }}" placeholder="Como é conhecido(a)">
                 @error('apelido') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
 
