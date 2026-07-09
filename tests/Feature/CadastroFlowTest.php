@@ -142,10 +142,16 @@ class CadastroFlowTest extends TestCase
         $this->assertSame([$visita->id], $filtrados);
         $this->assertNotContains($ligacao->id, $filtrados);
 
-        $this->withSession([config('consulta.session_key') => true])
+        $response = $this->withSession([config('consulta.session_key') => true])
             ->get(route('cadastros.export', ['tipo_contato' => Cadastro::TIPO_VISITA, 'ra' => 'Taguatinga']))
             ->assertOk()
             ->assertHeader('content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+
+        $content = $response->getContent();
+
+        $this->assertStringContainsString('Logradouro', $content);
+        $this->assertStringContainsString('RUA TESTE', $content);
+        $this->assertStringNotContainsString('AVENIDA TESTE', $content);
     }
 
     public function test_consulta_permite_excluir_um_cadastro(): void
