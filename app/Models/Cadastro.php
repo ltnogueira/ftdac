@@ -10,6 +10,8 @@ class Cadastro extends Model
 {
     public const TIPO_VISITA = 'visita';
     public const TIPO_LIGACAO = 'ligacao';
+    public const DEFAULT_TIPO_CONTATO = self::TIPO_LIGACAO;
+    public const DEFAULT_ATUALIZADO_POR = 'SISTEMA';
 
     protected $fillable = [
         'codigo',
@@ -33,6 +35,17 @@ class Cadastro extends Model
             self::TIPO_VISITA => 'Visita',
             self::TIPO_LIGACAO => 'Ligacao',
         ];
+    }
+
+    public static function proximoCodigo(): string
+    {
+        $maiorCodigo = static::query()
+            ->pluck('codigo')
+            ->filter(fn (mixed $codigo) => is_string($codigo) && preg_match('/^\d{4}$/', $codigo) === 1)
+            ->map(fn (string $codigo) => (int) $codigo)
+            ->max() ?? 0;
+
+        return str_pad((string) ($maiorCodigo + 1), 4, '0', STR_PAD_LEFT);
     }
 
     public function scopeFiltrar(Builder $query, array $filters): Builder

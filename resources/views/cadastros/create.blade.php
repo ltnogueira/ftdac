@@ -5,7 +5,7 @@
         <section class="ftdac-hero">
             <div>
                 <span class="ftdac-badge">FTDAC</span>
-                <h1>Atualização Cadastral</h1>
+                <h1>Cadastro Gama</h1>
             </div>
             <div class="ftdac-hero-card">
                 <small>Campos com * são obrigatórios</small>

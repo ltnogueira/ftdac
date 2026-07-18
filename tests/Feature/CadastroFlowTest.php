@@ -13,7 +13,6 @@ class CadastroFlowTest extends TestCase
     public function test_publico_pode_criar_um_cadastro(): void
     {
         $response = $this->post(route('cadastros.store'), [
-            'codigo' => 'cod001',
             'nome' => 'Maria Silva',
             'apelido' => 'Mariá',
             'ra' => 'Ceilândia',
@@ -23,16 +22,13 @@ class CadastroFlowTest extends TestCase
             'complemento' => 'Casa fundo',
             'celular' => '(11) 91234-5678',
             'email' => 'mÁria@example.com',
-            'lideranca' => 'Regional Á',
-            'atualizado_por' => 'Equipe Cadastro',
-            'tipo_contato' => Cadastro::TIPO_VISITA,
         ]);
 
         $response->assertRedirect(route('cadastros.create'));
         $response->assertSessionHas('success');
 
         $this->assertDatabaseHas('cadastros', [
-            'codigo' => 'COD001',
+            'codigo' => '0001',
             'nome' => 'MARIA SILVA',
             'apelido' => 'MARIA',
             'ra' => 'CEILANDIA',
@@ -41,16 +37,15 @@ class CadastroFlowTest extends TestCase
             'complemento' => 'CASA FUNDO',
             'celular' => '11912345678',
             'email' => 'maria@example.com',
-            'lideranca' => 'REGIONAL A',
-            'atualizado_por' => 'EQUIPE CADASTRO',
-            'tipo_contato' => Cadastro::TIPO_VISITA,
+            'lideranca' => null,
+            'atualizado_por' => Cadastro::DEFAULT_ATUALIZADO_POR,
+            'tipo_contato' => Cadastro::DEFAULT_TIPO_CONTATO,
         ]);
     }
 
     public function test_apelido_email_lideranca_e_complemento_sao_opcionais_no_cadastro(): void
     {
         $response = $this->post(route('cadastros.store'), [
-            'codigo' => 'cod002',
             'nome' => 'Joao Silva',
             'apelido' => '',
             'ra' => 'Gama',
@@ -61,8 +56,6 @@ class CadastroFlowTest extends TestCase
             'celular' => '(11) 99888-7777',
             'email' => '',
             'lideranca' => '',
-            'atualizado_por' => 'Operador',
-            'tipo_contato' => Cadastro::TIPO_LIGACAO,
         ]);
 
         $response->assertRedirect(route('cadastros.create'));
@@ -71,15 +64,101 @@ class CadastroFlowTest extends TestCase
             'complemento',
             'email',
             'lideranca',
+            'atualizado_por',
+            'tipo_contato',
         ]);
 
         $this->assertDatabaseHas('cadastros', [
-            'codigo' => 'COD002',
+            'codigo' => '0001',
             'apelido' => null,
             'complemento' => null,
             'email' => null,
             'lideranca' => null,
-            'atualizado_por' => 'OPERADOR',
+            'atualizado_por' => Cadastro::DEFAULT_ATUALIZADO_POR,
+            'tipo_contato' => Cadastro::DEFAULT_TIPO_CONTATO,
+        ]);
+    }
+
+    public function test_edicao_preserva_codigo_e_campos_ocultos(): void
+    {
+        $cadastro = Cadastro::query()->create([
+            'codigo' => '0007',
+            'nome' => 'NOME ORIGINAL',
+            'apelido' => 'ORIGINAL',
+            'ra' => 'GAMA',
+            'cep' => '01001000',
+            'logradouro' => 'RUA ORIGINAL',
+            'numero' => '10',
+            'complemento' => null,
+            'celular' => '11912345678',
+            'email' => 'original@example.com',
+            'lideranca' => 'LIDER ANTIGA',
+            'atualizado_por' => 'OPERADOR ANTIGO',
+            'tipo_contato' => Cadastro::TIPO_VISITA,
+        ]);
+
+        $this->withSession([config('consulta.session_key') => true])
+            ->put(route('cadastros.update', $cadastro), [
+                'nome' => 'Nome Atualizado',
+                'apelido' => '',
+                'ra' => 'Santa Maria',
+                'cep' => '02002000',
+                'logradouro' => 'Rua Atualizada',
+                'numero' => '20',
+                'complemento' => '',
+                'celular' => '(11) 99888-7777',
+                'email' => '',
+            ])
+            ->assertRedirect(route('cadastros.index'))
+            ->assertSessionHas('success');
+
+        $this->assertDatabaseHas('cadastros', [
+            'id' => $cadastro->id,
+            'codigo' => '0007',
+            'nome' => 'NOME ATUALIZADO',
+            'ra' => 'SANTA MARIA',
+            'logradouro' => 'RUA ATUALIZADA',
+            'lideranca' => 'LIDER ANTIGA',
+            'atualizado_por' => 'OPERADOR ANTIGO',
+            'tipo_contato' => Cadastro::TIPO_VISITA,
+        ]);
+    }
+
+    public function test_codigo_automatico_ignora_codigos_legados_fora_do_padrao_quatro_digitos(): void
+    {
+        Cadastro::query()->create([
+            'codigo' => '88435',
+            'nome' => 'LEGADO',
+            'apelido' => null,
+            'ra' => 'GAMA',
+            'cep' => '01001000',
+            'logradouro' => 'RUA LEGADA',
+            'numero' => '1',
+            'complemento' => null,
+            'celular' => '11912345678',
+            'email' => null,
+            'lideranca' => null,
+            'atualizado_por' => 'ADMIN',
+            'tipo_contato' => Cadastro::TIPO_LIGACAO,
+        ]);
+
+        $response = $this->post(route('cadastros.store'), [
+            'nome' => 'Novo Cadastro',
+            'apelido' => '',
+            'ra' => 'Santa Maria',
+            'cep' => '02002000',
+            'logradouro' => 'Rua Nova',
+            'numero' => '20',
+            'complemento' => '',
+            'celular' => '(11) 99888-7777',
+            'email' => '',
+        ]);
+
+        $response->assertRedirect(route('cadastros.create'));
+
+        $this->assertDatabaseHas('cadastros', [
+            'nome' => 'NOVO CADASTRO',
+            'codigo' => '0001',
         ]);
     }
 

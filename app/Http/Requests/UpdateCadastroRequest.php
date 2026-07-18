@@ -7,6 +7,20 @@ use Illuminate\Validation\Rule;
 
 class UpdateCadastroRequest extends StoreCadastroRequest
 {
+    protected function prepareForValidation(): void
+    {
+        $cadastro = $this->route('cadastro');
+
+        $this->merge([
+            'codigo' => $this->input('codigo', $cadastro?->codigo),
+            'lideranca' => $this->input('lideranca', $cadastro?->lideranca),
+            'atualizado_por' => $this->input('atualizado_por', $cadastro?->atualizado_por ?? Cadastro::DEFAULT_ATUALIZADO_POR),
+            'tipo_contato' => $this->input('tipo_contato', $cadastro?->tipo_contato ?? Cadastro::DEFAULT_TIPO_CONTATO),
+        ]);
+
+        parent::prepareForValidation();
+    }
+
     public function rules(): array
     {
         $cadastro = $this->route('cadastro');

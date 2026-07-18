@@ -245,6 +245,9 @@
 @php
     $isEdit = ($mode ?? 'create') === 'edit';
     $action = $isEdit ? route('cadastros.update', $cadastro) : route('cadastros.store');
+    $liderancaAtual = old('lideranca', data_get($cadastro ?? null, 'lideranca'));
+    $atualizadoPorAtual = old('atualizado_por', data_get($cadastro ?? null, 'atualizado_por') ?: \App\Models\Cadastro::DEFAULT_ATUALIZADO_POR);
+    $tipoContatoAtual = old('tipo_contato', data_get($cadastro ?? null, 'tipo_contato') ?: \App\Models\Cadastro::DEFAULT_TIPO_CONTATO);
 @endphp
 
 <form action="{{ $action }}" method="POST" class="ftdac-form">
@@ -259,6 +262,10 @@
         </div>
     @endif
 
+    <input type="hidden" name="lideranca" value="{{ $liderancaAtual }}">
+    <input type="hidden" name="atualizado_por" value="{{ $atualizadoPorAtual }}">
+    <input type="hidden" name="tipo_contato" value="{{ $tipoContatoAtual }}">
+
     <div class="ftdac-section">
         <div class="ftdac-section-header">
             <span class="ftdac-section-number">01</span>
@@ -269,13 +276,21 @@
         </div>
 
         <div class="row g-3">
-            <div class="col-12 col-md-4">
-                <label for="codigo" class="form-label">Código *</label>
-                <input type="text" class="form-control @error('codigo') is-invalid @enderror" id="codigo" name="codigo" value="{{ old('codigo', data_get($cadastro ?? null, 'codigo')) }}" placeholder="Ex.: 00123" required>
-                @error('codigo') <div class="invalid-feedback">{{ $message }}</div> @enderror
-            </div>
+            @if ($isEdit)
+                <div class="col-12 col-md-4">
+                    <label for="codigo" class="form-label">Código</label>
+                    <input type="text" class="form-control @error('codigo') is-invalid @enderror" id="codigo" name="codigo" value="{{ old('codigo', data_get($cadastro ?? null, 'codigo')) }}" readonly>
+                    @error('codigo') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                </div>
+            @else
+                <div class="col-12">
+                    <div class="alert alert-primary rounded-4 mb-0" role="alert">
+                        <strong>Código automático:</strong> o sistema gera o número sequencial do cadastro no momento do salvamento.
+                    </div>
+                </div>
+            @endif
 
-            <div class="col-12 col-md-8">
+            <div class="col-12 {{ $isEdit ? 'col-md-8' : '' }}">
                 <label for="nome" class="form-label">Nome *</label>
                 <input type="text" class="form-control @error('nome') is-invalid @enderror" id="nome" name="nome" value="{{ old('nome', data_get($cadastro ?? null, 'nome')) }}" placeholder="Nome completo" required>
                 @error('nome') <div class="invalid-feedback">{{ $message }}</div> @enderror
@@ -335,8 +350,8 @@
         <div class="ftdac-section-header">
             <span class="ftdac-section-number">03</span>
             <div>
-                <h2>Contato e atualização</h2>
-                <p>Informe o contato, a liderança responsável e o tipo de abordagem realizada.</p>
+                <h2>Contato</h2>
+                <p>Informe os dados de contato principais para este cadastro.</p>
             </div>
         </div>
 
@@ -351,42 +366,6 @@
                 <label for="email" class="form-label">E-mail</label>
                 <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email', data_get($cadastro ?? null, 'email')) }}" placeholder="nome@email.com">
                 @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
-            </div>
-
-            <div class="col-12 col-md-4">
-                <label for="lideranca" class="form-label">Liderança</label>
-                <input type="text" class="form-control @error('lideranca') is-invalid @enderror" id="lideranca" name="lideranca" value="{{ old('lideranca', data_get($cadastro ?? null, 'lideranca')) }}" placeholder="Nome da liderança">
-                @error('lideranca') <div class="invalid-feedback">{{ $message }}</div> @enderror
-            </div>
-
-            <div class="col-12 col-md-4">
-                <label for="atualizado_por" class="form-label">Atualizado por *</label>
-                <input type="text" class="form-control @error('atualizado_por') is-invalid @enderror" id="atualizado_por" name="atualizado_por" value="{{ old('atualizado_por', data_get($cadastro ?? null, 'atualizado_por')) }}" placeholder="Responsável pela atualização" required>
-                @error('atualizado_por') <div class="invalid-feedback">{{ $message }}</div> @enderror
-            </div>
-
-            <div class="col-12 col-md-4">
-                <label class="form-label d-block">Tipo de contato *</label>
-                <div class="ftdac-radio-group">
-                    @foreach ($tiposContato as $valor => $label)
-                        <label class="ftdac-radio-card" for="tipo_contato_{{ $valor }}">
-                            <input
-                                class="form-check-input @error('tipo_contato') is-invalid @enderror"
-                                type="radio"
-                                name="tipo_contato"
-                                id="tipo_contato_{{ $valor }}"
-                                value="{{ $valor }}"
-                                @checked(old('tipo_contato', data_get($cadastro ?? null, 'tipo_contato')) == $valor)
-                                required
-                            >
-                            <span>
-                                <strong>{{ $label }}</strong>
-                                <small>{{ $label === 'Visita' ? 'Atendimento presencial' : 'Contato telefônico' }}</small>
-                            </span>
-                        </label>
-                    @endforeach
-                </div>
-                @error('tipo_contato') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
             </div>
         </div>
     </div>

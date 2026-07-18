@@ -17,7 +17,7 @@ class StoreCadastroRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'codigo' => $this->normalizeText($this->input('codigo')),
+            'codigo' => $this->normalizeText($this->input('codigo') ?: Cadastro::proximoCodigo()),
             'nome' => $this->normalizeText($this->input('nome')),
             'apelido' => $this->normalizeText($this->input('apelido')),
             'ra' => $this->normalizeText($this->input('ra')),
@@ -28,8 +28,8 @@ class StoreCadastroRequest extends FormRequest
             'celular' => preg_replace('/\D+/', '', (string) $this->input('celular')),
             'email' => $this->normalizeEmail($this->input('email')),
             'lideranca' => $this->normalizeText($this->input('lideranca')),
-            'atualizado_por' => $this->normalizeText($this->input('atualizado_por')),
-            'tipo_contato' => $this->input('tipo_contato'),
+            'atualizado_por' => $this->normalizeText($this->input('atualizado_por') ?: Cadastro::DEFAULT_ATUALIZADO_POR),
+            'tipo_contato' => $this->input('tipo_contato') ?: Cadastro::DEFAULT_TIPO_CONTATO,
         ]);
     }
 
