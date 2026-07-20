@@ -65,7 +65,7 @@ class StoreCadastroRequest extends FormRequest
             'complemento' => 'complemento',
             'celular' => 'celular',
             'email' => 'e-mail',
-            'lideranca' => 'lideranca',
+            'lideranca' => 'coordenador',
             'atualizado_por' => 'atualizado por',
             'tipo_contato' => 'tipo de contato',
         ];

@@ -41,7 +41,7 @@
                 </div>
 
                 <div class="col-12 col-md-3">
-                    <label for="lideranca" class="form-label">Lideranca</label>
+                    <label for="lideranca" class="form-label">Coordenador</label>
                     <input type="text" class="form-control" id="lideranca" name="lideranca" value="{{ $filters['lideranca'] ?? '' }}">
                 </div>
 
@@ -90,7 +90,7 @@
                             <th>RA</th>
                             <th>Celular</th>
                             <th>E-mail</th>
-                            <th>Lideranca</th>
+                            <th>Coordenador</th>
                             <th>Tipo</th>
                             <th>Atualizado por</th>
                             <th>Data do cadastro</th>
@@ -106,7 +106,7 @@
                                 <td>{{ $cadastro->ra ?: '-' }}</td>
                                 <td>{{ $cadastro->celular }}</td>
                                 <td>{{ $cadastro->email ?: '-' }}</td>
-                                <td>{{ $cadastro->lideranca }}</td>
+                                <td>{{ $cadastro->lideranca ?: '-' }}</td>
                                 <td>{{ $tiposContato[$cadastro->tipo_contato] ?? $cadastro->tipo_contato }}</td>
                                 <td>{{ $cadastro->atualizado_por }}</td>
                                 <td>{{ optional($cadastro->created_at)->format('d/m/Y H:i') }}</td>

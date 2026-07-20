@@ -22,6 +22,7 @@ class CadastroFlowTest extends TestCase
             'complemento' => 'Casa fundo',
             'celular' => '(11) 91234-5678',
             'email' => 'mÁria@example.com',
+            'lideranca' => 'Coordenadora Áurea',
         ]);
 
         $response->assertRedirect(route('cadastros.create'));
@@ -37,7 +38,7 @@ class CadastroFlowTest extends TestCase
             'complemento' => 'CASA FUNDO',
             'celular' => '11912345678',
             'email' => 'maria@example.com',
-            'lideranca' => null,
+            'lideranca' => 'COORDENADORA AUREA',
             'atualizado_por' => Cadastro::DEFAULT_ATUALIZADO_POR,
             'tipo_contato' => Cadastro::DEFAULT_TIPO_CONTATO,
         ]);

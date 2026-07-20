@@ -89,7 +89,7 @@ class CadastroController extends Controller
 
         return SimpleXlsxExporter::download(
             'cadastros.xlsx',
-            ['Codigo', 'Nome', 'Apelido', 'RA', 'Logradouro', 'Celular', 'E-mail', 'Lideranca', 'Tipo de contato', 'Atualizado por', 'Data do cadastro'],
+            ['Codigo', 'Nome', 'Apelido', 'RA', 'Logradouro', 'Celular', 'E-mail', 'Coordenador', 'Tipo de contato', 'Atualizado por', 'Data do cadastro'],
             $rows
         );
     }
