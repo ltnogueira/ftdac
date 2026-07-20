@@ -245,6 +245,7 @@
 @php
     $isEdit = ($mode ?? 'create') === 'edit';
     $action = $isEdit ? route('cadastros.update', $cadastro) : route('cadastros.store');
+    $emailAtual = old('email', data_get($cadastro ?? null, 'email'));
     $atualizadoPorAtual = old('atualizado_por', data_get($cadastro ?? null, 'atualizado_por') ?: \App\Models\Cadastro::DEFAULT_ATUALIZADO_POR);
     $tipoContatoAtual = old('tipo_contato', data_get($cadastro ?? null, 'tipo_contato') ?: \App\Models\Cadastro::DEFAULT_TIPO_CONTATO);
 @endphp
@@ -261,6 +262,7 @@
         </div>
     @endif
 
+    <input type="hidden" name="email" value="{{ $emailAtual }}">
     <input type="hidden" name="atualizado_por" value="{{ $atualizadoPorAtual }}">
     <input type="hidden" name="tipo_contato" value="{{ $tipoContatoAtual }}">
 
@@ -349,24 +351,18 @@
             <span class="ftdac-section-number">03</span>
             <div>
                 <h2>Contato</h2>
-                <p>Informe os dados de contato principais e o coordenador deste cadastro.</p>
+                <p>Informe o celular principal e o coordenador deste cadastro.</p>
             </div>
         </div>
 
         <div class="row g-3 align-items-start">
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-6">
                 <label for="celular" class="form-label">Celular *</label>
                 <input type="text" class="form-control @error('celular') is-invalid @enderror" id="celular" name="celular" value="{{ old('celular', data_get($cadastro ?? null, 'celular')) }}" placeholder="(00) 00000-0000" data-mask="celular" inputmode="numeric" required>
                 @error('celular') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
 
-            <div class="col-12 col-md-4">
-                <label for="email" class="form-label">E-mail</label>
-                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email', data_get($cadastro ?? null, 'email')) }}" placeholder="nome@email.com">
-                @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
-            </div>
-
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-6">
                 <label for="lideranca" class="form-label">Coordenador</label>
                 <input type="text" class="form-control @error('lideranca') is-invalid @enderror" id="lideranca" name="lideranca" value="{{ old('lideranca', data_get($cadastro ?? null, 'lideranca')) }}" placeholder="Nome do coordenador">
                 @error('lideranca') <div class="invalid-feedback">{{ $message }}</div> @enderror

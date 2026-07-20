@@ -80,7 +80,7 @@ class CadastroFlowTest extends TestCase
         ]);
     }
 
-    public function test_edicao_preserva_codigo_e_campos_ocultos(): void
+    public function test_edicao_preserva_codigo_email_e_campos_ocultos(): void
     {
         $cadastro = Cadastro::query()->create([
             'codigo' => '0007',
@@ -119,6 +119,7 @@ class CadastroFlowTest extends TestCase
             'nome' => 'NOME ATUALIZADO',
             'ra' => 'SANTA MARIA',
             'logradouro' => 'RUA ATUALIZADA',
+            'email' => 'original@example.com',
             'lideranca' => 'LIDER ANTIGA',
             'atualizado_por' => 'OPERADOR ANTIGO',
             'tipo_contato' => Cadastro::TIPO_VISITA,

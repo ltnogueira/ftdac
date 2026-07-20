@@ -13,6 +13,7 @@ class UpdateCadastroRequest extends StoreCadastroRequest
 
         $this->merge([
             'codigo' => $this->input('codigo', $cadastro?->codigo),
+            'email' => $this->filled('email') ? $this->input('email') : $cadastro?->email,
             'lideranca' => $this->input('lideranca', $cadastro?->lideranca),
             'atualizado_por' => $this->input('atualizado_por', $cadastro?->atualizado_por ?? Cadastro::DEFAULT_ATUALIZADO_POR),
             'tipo_contato' => $this->input('tipo_contato', $cadastro?->tipo_contato ?? Cadastro::DEFAULT_TIPO_CONTATO),
