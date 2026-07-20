@@ -245,6 +245,7 @@
 @php
     $isEdit = ($mode ?? 'create') === 'edit';
     $action = $isEdit ? route('cadastros.update', $cadastro) : route('cadastros.store');
+    $cepAtual = old('cep', data_get($cadastro ?? null, 'cep'));
     $emailAtual = old('email', data_get($cadastro ?? null, 'email'));
     $atualizadoPorAtual = old('atualizado_por', data_get($cadastro ?? null, 'atualizado_por') ?: \App\Models\Cadastro::DEFAULT_ATUALIZADO_POR);
     $tipoContatoAtual = old('tipo_contato', data_get($cadastro ?? null, 'tipo_contato') ?: \App\Models\Cadastro::DEFAULT_TIPO_CONTATO);
@@ -262,6 +263,7 @@
         </div>
     @endif
 
+    <input type="hidden" name="cep" value="{{ $cepAtual }}">
     <input type="hidden" name="email" value="{{ $emailAtual }}">
     <input type="hidden" name="atualizado_por" value="{{ $atualizadoPorAtual }}">
     <input type="hidden" name="tipo_contato" value="{{ $tipoContatoAtual }}">
@@ -303,8 +305,8 @@
             </div>
 
             <div class="col-12 col-md-6">
-                <label for="ra" class="form-label">RA - Região Administrativa *</label>
-                <input type="text" class="form-control @error('ra') is-invalid @enderror" id="ra" name="ra" value="{{ old('ra', data_get($cadastro ?? null, 'ra')) }}" placeholder="Ex.: Ceilandia, Plano Piloto, Samambaia" required>
+                <label for="ra" class="form-label">RA - Região Administrativa</label>
+                <input type="text" class="form-control @error('ra') is-invalid @enderror" id="ra" name="ra" value="{{ old('ra', data_get($cadastro ?? null, 'ra')) }}" placeholder="Ex.: Ceilandia, Plano Piloto, Samambaia">
                 @error('ra') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
         </div>
@@ -315,26 +317,20 @@
             <span class="ftdac-section-number">02</span>
             <div>
                 <h2>Endereço</h2>
-                <p>Preencha o endereço quando essa informação estiver disponível.</p>
+                <p>Preencha os dados de endereço quando essa informação estiver disponível.</p>
             </div>
         </div>
 
         <div class="row g-3">
-            <div class="col-12 col-md-3">
-                <label for="cep" class="form-label">CEP *</label>
-                <input type="text" class="form-control @error('cep') is-invalid @enderror" id="cep" name="cep" value="{{ old('cep', data_get($cadastro ?? null, 'cep')) }}" placeholder="00000-000" data-mask="cep" inputmode="numeric" required>
-                @error('cep') <div class="invalid-feedback">{{ $message }}</div> @enderror
-            </div>
-
-            <div class="col-12 col-md-7">
-                <label for="logradouro" class="form-label">Logradouro *</label>
-                <input type="text" class="form-control @error('logradouro') is-invalid @enderror" id="logradouro" name="logradouro" value="{{ old('logradouro', data_get($cadastro ?? null, 'logradouro')) }}" placeholder="Rua, avenida, travessa..." required>
+            <div class="col-12 col-md-8">
+                <label for="logradouro" class="form-label">Logradouro</label>
+                <input type="text" class="form-control @error('logradouro') is-invalid @enderror" id="logradouro" name="logradouro" value="{{ old('logradouro', data_get($cadastro ?? null, 'logradouro')) }}" placeholder="Rua, avenida, travessa...">
                 @error('logradouro') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
 
-            <div class="col-12 col-md-2">
-                <label for="numero" class="form-label">Número *</label>
-                <input type="text" class="form-control @error('numero') is-invalid @enderror" id="numero" name="numero" value="{{ old('numero', data_get($cadastro ?? null, 'numero')) }}" placeholder="Nº" required>
+            <div class="col-12 col-md-4">
+                <label for="numero" class="form-label">Número</label>
+                <input type="text" class="form-control @error('numero') is-invalid @enderror" id="numero" name="numero" value="{{ old('numero', data_get($cadastro ?? null, 'numero')) }}" placeholder="Nº">
                 @error('numero') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
 

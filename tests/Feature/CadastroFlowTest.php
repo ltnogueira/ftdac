@@ -10,19 +10,11 @@ class CadastroFlowTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_publico_pode_criar_um_cadastro(): void
+    public function test_publico_pode_criar_um_cadastro_com_apenas_nome_e_celular_obrigatorios(): void
     {
         $response = $this->post(route('cadastros.store'), [
             'nome' => 'Maria Silva',
-            'apelido' => 'Mariá',
-            'ra' => 'Ceilândia',
-            'cep' => '01001-000',
-            'logradouro' => 'Rua São João',
-            'numero' => '123a',
-            'complemento' => 'Casa fundo',
             'celular' => '(11) 91234-5678',
-            'email' => 'mÁria@example.com',
-            'lideranca' => 'Coordenadora Áurea',
         ]);
 
         $response->assertRedirect(route('cadastros.create'));
@@ -31,14 +23,15 @@ class CadastroFlowTest extends TestCase
         $this->assertDatabaseHas('cadastros', [
             'codigo' => '0001',
             'nome' => 'MARIA SILVA',
-            'apelido' => 'MARIA',
-            'ra' => 'CEILANDIA',
-            'logradouro' => 'RUA SAO JOAO',
-            'numero' => '123A',
-            'complemento' => 'CASA FUNDO',
+            'apelido' => null,
+            'ra' => null,
+            'cep' => null,
+            'logradouro' => null,
+            'numero' => null,
+            'complemento' => null,
             'celular' => '11912345678',
-            'email' => 'maria@example.com',
-            'lideranca' => 'COORDENADORA AUREA',
+            'email' => null,
+            'lideranca' => null,
             'atualizado_por' => Cadastro::DEFAULT_ATUALIZADO_POR,
             'tipo_contato' => Cadastro::DEFAULT_TIPO_CONTATO,
         ]);
@@ -80,7 +73,7 @@ class CadastroFlowTest extends TestCase
         ]);
     }
 
-    public function test_edicao_preserva_codigo_email_e_campos_ocultos(): void
+    public function test_edicao_preserva_codigo_cep_email_e_campos_ocultos(): void
     {
         $cadastro = Cadastro::query()->create([
             'codigo' => '0007',
@@ -103,7 +96,6 @@ class CadastroFlowTest extends TestCase
                 'nome' => 'Nome Atualizado',
                 'apelido' => '',
                 'ra' => 'Santa Maria',
-                'cep' => '02002000',
                 'logradouro' => 'Rua Atualizada',
                 'numero' => '20',
                 'complemento' => '',
@@ -118,6 +110,7 @@ class CadastroFlowTest extends TestCase
             'codigo' => '0007',
             'nome' => 'NOME ATUALIZADO',
             'ra' => 'SANTA MARIA',
+            'cep' => '01001000',
             'logradouro' => 'RUA ATUALIZADA',
             'email' => 'original@example.com',
             'lideranca' => 'LIDER ANTIGA',

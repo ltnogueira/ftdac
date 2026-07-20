@@ -13,6 +13,7 @@ class UpdateCadastroRequest extends StoreCadastroRequest
 
         $this->merge([
             'codigo' => $this->input('codigo', $cadastro?->codigo),
+            'cep' => $this->filled('cep') ? $this->input('cep') : $cadastro?->cep,
             'email' => $this->filled('email') ? $this->input('email') : $cadastro?->email,
             'lideranca' => $this->input('lideranca', $cadastro?->lideranca),
             'atualizado_por' => $this->input('atualizado_por', $cadastro?->atualizado_por ?? Cadastro::DEFAULT_ATUALIZADO_POR),
@@ -30,10 +31,10 @@ class UpdateCadastroRequest extends StoreCadastroRequest
             'codigo' => ['required', 'string', 'max:50', Rule::unique('cadastros', 'codigo')->ignore($cadastro)],
             'nome' => ['required', 'string', 'max:255'],
             'apelido' => ['nullable', 'string', 'max:255'],
-            'ra' => ['required', 'string', 'max:255'],
-            'cep' => ['required', 'regex:/^\d{8}$/'],
-            'logradouro' => ['required', 'string', 'max:255'],
-            'numero' => ['required', 'string', 'max:20'],
+            'ra' => ['nullable', 'string', 'max:255'],
+            'cep' => ['nullable', 'regex:/^\d{8}$/'],
+            'logradouro' => ['nullable', 'string', 'max:255'],
+            'numero' => ['nullable', 'string', 'max:20'],
             'complemento' => ['nullable', 'string', 'max:255'],
             'celular' => ['required', 'regex:/^(?:55)?[1-9]{2}9\d{8}$/'],
             'email' => ['nullable', 'email', 'max:255'],
